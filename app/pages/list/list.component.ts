@@ -1,22 +1,22 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Grocery } from '../../shared/grocery/grocery';
-import { GroceryListService } from '../../shared/grocery/grocery-list.service';
-import { TextField } from 'ui/text-field';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Grocery } from "../../shared/grocery/grocery";
+import { GroceryListService } from "../../shared/grocery/grocery-list.service";
+import { TextField } from "ui/text-field";
 import * as SocialShare from "nativescript-social-share";
 
 @Component({
-  selector: 'list',
+  selector: "list",
   moduleId: module.id,
-  templateUrl: './list.html',
+  templateUrl: "./list.html",
   providers: [GroceryListService],
-  styleUrls: ['./list-common.css', './list.css']
+  styleUrls: ["./list-common.css", "./list.css"]
 })
 export class ListComponent implements OnInit {
   groceryList: Array<Grocery> = [];
-  grocery = '';
+  grocery = "";
   isLoading = true;
   listLoaded = false;
-  @ViewChild('groceryTextField') groceryTextField: ElementRef;
+  @ViewChild("groceryTextField") groceryTextField: ElementRef;
 
   constructor(private groceryListService: GroceryListService) {}
 
@@ -32,8 +32,8 @@ export class ListComponent implements OnInit {
   }
 
   add() {
-    if (this.grocery.trim() === '') {
-      alert('Enter a grocery item');
+    if (this.grocery.trim() === "") {
+      alert("Enter a grocery item");
       return;
     }
 
@@ -44,14 +44,28 @@ export class ListComponent implements OnInit {
     this.groceryListService.add(this.grocery).subscribe(
       groceryObject => {
         this.groceryList.unshift(groceryObject);
-        this.grocery = '';
+        this.grocery = "";
       },
       () => {
         alert({
-          message: 'An error occurred while adding an item to your list.',
-          okButtonText: 'OK'
+          message: "An error occurred while adding an item to your list.",
+          okButtonText: "OK"
         });
-        this.grocery = '';
+        this.grocery = "";
+      }
+    );
+  }
+
+  delete(grocery: Grocery) {
+    this.groceryListService.delete(grocery.id).subscribe(
+      () => {
+        this.groceryList.splice(this.groceryList.indexOf(grocery), 1);
+      },
+      error => {
+        alert({
+          message: "An error occurred while deleting the grocery.",
+          okButtonText: "OK"
+        });
       }
     );
   }

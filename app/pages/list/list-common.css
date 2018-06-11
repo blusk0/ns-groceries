@@ -23,3 +23,11 @@ ListView {
 TextField {
   color: white;
 }
+.delete {
+  background-color: black;
+  height: 15;
+  width: 15;
+  vertical-align: center;
+  padding: 4;
+  border-radius: 50%;
+}
